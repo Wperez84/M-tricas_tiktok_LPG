@@ -367,9 +367,16 @@ function parsearIdTikTok(url) {
   return m ? m[1] : null;
 }
 
+// Cuenta de TikTok autorizada (la API solo entrega videos de la cuenta que autoriza)
+const TIKTOK_CUENTA = 'campuslife.sv';
+
 function metricasTikTok(url) {
   const id = parsearIdTikTok(url);
   if (!id) return null;
+  if (url.toLowerCase().indexOf('@' + TIKTOK_CUENTA) === -1) {
+    Logger.log('TikTok: omitido (no es de @' + TIKTOK_CUENTA + ') ' + url);
+    return null;
+  }
   const token = obtenerTokenTikTok();
   if (!token) { Logger.log('TikTok: sin token. Ejecuta autorizarTikTok().'); return null; }
 
